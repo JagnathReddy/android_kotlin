@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
@@ -20,8 +22,11 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 fun showoption(
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
-    navController: NavController
+    navController: NavController,
+
+    listViewModel: ListViewModel = viewModel()
 ){
+    val UiState by listViewModel.uiState.collectAsState()
     var item by remember {
         mutableStateOf(
             (0..20).map {
@@ -49,6 +54,8 @@ fun showoption(
         strname+=it.name+"|"
     }
     strabsent=strname
+    listViewModel.set_data(strabsent)
+
     Log.d(TAG,"thisis final"+strabsent)
     Log.d(TAG, "mainscreen: ${strabsent}===========================")
 
@@ -67,7 +74,7 @@ fun showoption(
                 modifier = Modifier.weight(1f),
                 // the button is enabled when the user makes a selection
                 enabled = true,
-                onClick = { navController.navigate(route = Screen.ShowList.route+"$strabsent")}
+                onClick = { navController.navigate(route = Screen.ShowList.route)}
             ) {
                 Text(text = "Next")
             }

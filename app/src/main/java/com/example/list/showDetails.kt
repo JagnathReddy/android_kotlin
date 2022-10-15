@@ -14,6 +14,8 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,19 +63,19 @@ var list2= listOf(
 
 fun showdetails(
     navController: NavController,
+    listViewModel: ListViewModel = viewModel(),
 
     onSendButtonClicked: (String, String) -> Unit,
-    notpresent:String
 ){
-    Log.d(TAG,notpresent+"see?")
+    val Uistate by listViewModel.uiState.collectAsState()
 
     val context = LocalContext.current
     val sdf = SimpleDateFormat("'Date\n': dd-MM-yyyy ")
     Log.d(TAG, "showdetails: FINE TILL 2")
 
     val currentDateAndTime = sdf.format(Date()).toString()
-    var rolln=notpresent.drop(4)
-    var pre_Stu=rolln.split("&")
+    Log.d(TAG,"####################################################################################"+listViewModel.get_data().toString())
+    var pre_Stu=listViewModel.get_data().split("&")
     Log.d(TAG,pre_Stu[0]+"aur--------------------------------"+pre_Stu[1])
     var out="Students Present \n"
     pre_Stu[0].split("|").forEach() {
@@ -88,7 +91,8 @@ fun showdetails(
         Column(
             modifier = Modifier
                 .padding(all = 8.dp)
-                .fillMaxWidth().verticalScroll(enabled = true, state = ScrollState(0)),
+                .fillMaxWidth()
+                .verticalScroll(enabled = true, state = ScrollState(0)),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Surface(

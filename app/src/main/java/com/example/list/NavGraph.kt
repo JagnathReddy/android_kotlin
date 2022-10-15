@@ -6,13 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    listViewModel: ListViewModel= viewModel()
 ){
     NavHost(navController = navController,
     startDestination = Screen.Home.route){
@@ -24,24 +26,22 @@ fun SetupNavGraph(
         composable(
             route = Screen.Atten.route
         ){
-            mainscreen(navController = navController)
+            mainscreen(navController = navController, listViewModel = listViewModel)
         }
         composable(
             route=Screen.option.route
         ){
-            showoption(navController = navController)
+            showoption(navController = navController, listViewModel = listViewModel)
         }
         composable(
-            route=Screen.ShowList.route,
-        arguments = listOf(navArgument("ip"){
-            type=NavType.StringType
-        })
+            route=Screen.ShowList.route
         ){
             val context = LocalContext.current
-            showdetails(navController = navController,  notpresent =it.arguments?.getString("ip").toString(),
+            showdetails(navController = navController, listViewModel = listViewModel,
 
                 onSendButtonClicked = { subject: String, summary: String ->
                     shareOrder(context, subject = subject, summary = summary)
+
                 }
                 )
 
