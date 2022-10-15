@@ -157,7 +157,7 @@ fun showdetails(
                             // the button is enabled when the user makes a selection
                             enabled = true,
                             onClick = {
-                                onSendButtonClicked("jaa na bc", out)
+                                onSendButtonClicked("markTOgo", out)
 
 
                             }

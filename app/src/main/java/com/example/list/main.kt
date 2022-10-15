@@ -28,7 +28,7 @@ fun mainscreen(
     val UiState by listViewModel.uiState.collectAsState()
         var items by remember {
             mutableStateOf(
-                (0..60).map {
+                (0..61).map {
                     student(
                         name = names[it],
                         present = false
